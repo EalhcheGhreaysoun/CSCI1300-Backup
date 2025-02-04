@@ -1,40 +1,47 @@
 #include <iostream>
-#include <iomanip>
-
 using namespace std;
 
-int main(){
-
-    char inputCar;
-    int days;
-
-    cout << "Which car type (A, B, C, or D) would you like to rent?" << endl;
-    cin >> inputCar;
-
-    cout << "How many days would you like to rent this car?" << endl;
-    cin >> days;
-
-
-    if (days > 0){
-        switch (inputCar)
+double calculateSowingTime(double area, char machine_type){
+    if (area > 0)
+    {
+        switch (machine_type)
         {
-            case 'A':
-                cout << fixed << setprecision(2) << "Your total is: $" << 1.23 * (80+days*15) << endl;
+            case 'W':
+                return (3/2)*area;
                 break;
-            case 'B':
-                cout << fixed << setprecision(2) << "Your total is: $" << 1.23 * (80+days*15) << endl;
+            case 'X':
+                return (10/3)*area;
                 break;
-            case 'C':
-                cout << fixed << setprecision(2) << "Your total is: $" << 1.23 * (80+days*15) << endl;
+            case 'Y':
+                return (7/2)*area;
                 break;
-            case 'D':
-                cout << fixed << setprecision(2) << "Your total is: $" << 1.23 * (80+days*15) << endl;
-                break;    
+            case 'Z':
+                return (8/7)*area;
+                break;
             default:
-                cout << "Please enter valid input." << endl;
+                return 0;
                 break;
         }
-    } else {
-        cout << "Please enter valid input." << endl;
+    }else {
+        return 0;
     }
+}
+
+int main(){
+    double areaIn;
+    char machine;
+
+    cout << "Enter area of the farmland in sq ft:" << endl;
+    cin >> areaIn;
+
+    cout << "Enter the type of sowing machine to be used:" << endl;
+    cin >> machine;
+
+    if (calculateSowingTime(areaIn, machine) == 0)
+    {
+        cout << "Area or machine type is invalid. Time cannot be calculated." << endl;            
+    }else {
+        cout << "The time taken is: " << calculateSowingTime(areaIn, machine) << "minutes." << endl;
+    }
+    
 }
