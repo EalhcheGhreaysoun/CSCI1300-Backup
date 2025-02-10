@@ -1,47 +1,48 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-double calculateSowingTime(double area, char machine_type){
-    if (area > 0)
-    {
-        switch (machine_type)
-        {
-            case 'W':
-                return (3/2)*area;
-                break;
-            case 'X':
-                return (10/3)*area;
-                break;
-            case 'Y':
-                return (7/2)*area;
-                break;
-            case 'Z':
-                return (8/7)*area;
-                break;
-            default:
-                return 0;
-                break;
+
+bool checkDigit(string c){
+    bool validate = true;
+    const char *charArray = c.c_str();
+
+    for (unsigned int i = 0; i < c.length(); i++){
+        if(!isdigit(charArray[i])){
+            if (charArray[0] == '-' && c.length() > 1){
+                validate = true;
+            }else{
+                validate = false;
+            }
         }
-    }else {
-        return 0;
+    }
+    if (validate){
+        return true;
+    }else{
+        return false;
     }
 }
 
-int main(){
-    double areaIn;
-    char machine;
-
-    cout << "Enter area of the farmland in sq ft:" << endl;
-    cin >> areaIn;
-
-    cout << "Enter the type of sowing machine to be used:" << endl;
-    cin >> machine;
-
-    if (calculateSowingTime(areaIn, machine) == 0)
-    {
-        cout << "Area or machine type is invalid. Time cannot be calculated." << endl;            
-    }else {
-        cout << "The time taken is: " << calculateSowingTime(areaIn, machine) << "minutes." << endl;
+bool validateInt(string input){
+    if (!input.empty() && checkDigit(input)){
+        return true;
+    }else{
+        return false;
     }
-    
+
+}
+
+int main(){
+    string number;
+    cout << "Enter the integer : " << endl;
+    getline(cin, number);
+    if(validateInt(number))
+    {
+        cout << "The entered string is a valid integer!!" << endl;
+    }
+    else if (!validateInt(number))
+    {
+        cout << "The entered string is not a valid integer!!" << endl;
+    }
+    return 0;
 }
