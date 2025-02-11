@@ -1,48 +1,24 @@
+
 #include <iostream>
-#include <string>
+#include <cassert>
 using namespace std;
 
+int main() {
+    int m = 0;
+    int i = 0;
 
-bool checkDigit(string c){
-    bool validate = true;
-    const char *charArray = c.c_str();
-
-    for (unsigned int i = 0; i < c.length(); i++){
-        if(!isdigit(charArray[i])){
-            if (charArray[0] == '-' && c.length() > 1){
-                validate = true;
-            }else{
-                validate = false;
-            }
+    while (i < 5)
+    {
+        int s = 1;
+        if (i == 0 && (i % 3 == 0)){
+            s = s * (-1);
+            cout << m * s << endl;
+        }else{
+            m+= 2;
+            cout << m << endl;
         }
-    }
-    if (validate){
-        return true;
-    }else{
-        return false;
+        i++;
     }
 }
 
-bool validateInt(string input){
-    if (!input.empty() && checkDigit(input)){
-        return true;
-    }else{
-        return false;
-    }
-
-}
-
-int main(){
-    string number;
-    cout << "Enter the integer : " << endl;
-    getline(cin, number);
-    if(validateInt(number))
-    {
-        cout << "The entered string is a valid integer!!" << endl;
-    }
-    else if (!validateInt(number))
-    {
-        cout << "The entered string is not a valid integer!!" << endl;
-    }
-    return 0;
-}
+//the code outputs 0, 2, 4, 6, 8.
