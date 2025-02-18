@@ -1,24 +1,49 @@
 
 #include <iostream>
-#include <cassert>
 using namespace std;
 
 int main() {
-    int m = 0;
-    int i = 0;
-
-    while (i < 5)
+    int x=4;
+    int y=1;
+    switch (y)
     {
-        int s = 1;
-        if (i == 0 && (i % 3 == 0)){
-            s = s * (-1);
-            cout << m * s << endl;
-        }else{
-            m+= 2;
-            cout << m << endl;
+    case 1:
+        switch (x)
+        {
+            case 2:
+                cout << "Yippee ";
+            case 3:
+                cout << "Kai ";
+                break;
+            case 4:
+                cout << "test ";
+            default:
+                cout << "test3 ";
+                break;
         }
-        i++;
+    case 2:
+        cout << "case 2" << endl;
+        if (0 <= x && x < 2) {
+            cout << "test 2 ";
+        } else if (x < 4) {
+            cout << "Yai ";
+        }
+        if (x < 6) {
+            cout << "test 5 ";
+        }
+        cout << "test 4 ";
+    default:
+        if (0 >= x && x < 3) {
+            cout << "Yai ";
+        } else if (x < 4) {
+            cout << "Yay ";
+        } else if (x < 6) {
+        if (y > 2) {
+            cout << "Yippee ";
+        } else {
+            cout << "Kai ";
+        }
+        }
     }
+    return 0;
 }
-
-//the code outputs 0, 2, 4, 6, 8.

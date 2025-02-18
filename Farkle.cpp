@@ -2,6 +2,7 @@
 #include<array>
 #include <cstdlib>
 #include <ctime> 
+#include "testFile.cpp"
 using namespace std;
 
 array<int,6> rollDice(int num){

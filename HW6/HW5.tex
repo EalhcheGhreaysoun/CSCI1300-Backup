@@ -1,0 +1,159 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
+
+\begin{document}
+CSCI 1300 Recitation HW5
+
+\vspace{1cm}
+
+Question 1:
+\begin{verbatim}
+        #include <iostream> 
+        using namespace std;
+
+        int main() {
+
+        int num = 1; 
+
+        while(num <= 10) {
+            cout << num << " ";
+            num = num + 1;     // removed the int before num
+        } 
+
+        return 0; 
+        } 
+\end{verbatim}
+
+\vspace{1cm}
+Question 2:
+\begin{verbatim}
+        #include <iostream> 
+        using namespace std;
+
+        int main() { 
+
+        int even = 2;
+
+        while (even <= 9) { //changed != to <=
+            cout << even << " "; 
+            even += 2; 
+        } 
+
+        return 0; 
+        } 
+\end{verbatim}
+
+\vspace{1cm}
+
+Question 3:
+
+the psudocode outputs 3, -3, 6, -6, 9.
+
+\vspace{2cm}
+
+Question 4:
+
+\hspace{0.25cm}4.a:
+
+\begin{verbatim}
+        define function applyDeductions
+        pass in income
+        pass in number of dependants
+        if income is less than 14600:
+        return 0;
+        else:
+        if number of dependants is greater than zero
+        return income - 14600 - 500
+        else
+        return income -14600
+        end
+
+        define function calculateTax
+        pass in income
+        if income <= 10000:
+        return income * 0.9
+        else if income <= 50000: 
+        return income * 0.85
+        else: 
+        return income * 0.8
+        end
+
+        define function computeNetIncome
+        pass in gross income, number of dependants
+        declare double variable money
+        set money to calculateTac(applyDeductions(income, number of dependants))
+        if number of dependants is greater than zero: 
+        return money + 14600 + 500
+        else: 
+        return money + 14600
+        end
+\end{verbatim}
+
+\vspace{0.25cm}
+\hspace{0.25cm}4.b:
+
+    example input 1: income: \$100,000, dependants: 2, output: \$83,020
+
+    example input 2: income: \$10,000, dependants: 0, output: \$10,000
+
+    \hspace{0.25cm}4.c:
+
+\begin{verbatim}
+    assert(computeNetIncome(100000, 2) == 83020)
+    assert(computeNetIncome(10000, 0) == 10000)
+\end{verbatim}
+
+\vspace{0.25cm}
+
+\hspace{0.25cm}4.d:
+
+\begin{verbatim}
+        #include <iostream>
+        #include <cassert>
+        
+        using namespace std;
+        
+        double applyDeductions(double income, int numDependents) {
+            if(income < 14600){
+                return 0;
+            }else{
+                if(numDependents >=0){
+                    return income - 14600 -500;
+                }else{
+                    return income -14600;
+                }
+            }
+        }
+        
+        double calculateTax(double taxableIncome) {
+            if(taxableIncome <= 10000){
+                return taxableIncome * 0.9;
+            } else if (taxableIncome <= 50000){
+                return taxableIncome * 0.85;
+            } else{
+                return taxableIncome * 0.8;
+            }
+        }
+        
+        double computeNetIncome(double grossIncome, int numDependents) {
+            double money = calculateTax(applyDeductions(grossIncome, numDependents));
+            if (money == 0){
+                return grossIncome;
+            }else{
+                if(numDependents > 0){
+                    return money + 14600 +500;
+                }else{
+                    return money + 14600;
+                }
+            }
+        }
+        
+        int main(){
+            assert(computeNetIncome(100000, 2) == 83020);
+            assert(computeNetIncome(10000, 0) == 10000);
+        }
+\end{verbatim}
+
+\end{document}
