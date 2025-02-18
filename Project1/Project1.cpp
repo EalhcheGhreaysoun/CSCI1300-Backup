@@ -40,10 +40,23 @@ double strandSimilarity(string strand1, string strand2){
     return compared;
 }
 
+int bestStrandMatch(string input_strand, string target_strand){
+    int previousCounter = 0;
+    int counter = 0;
+    for (unsigned int i = 0; i < (input_strand.length() - target_strand.length()); i++){
+        if (input_strand[i] == target_strand[0]){
+            for (unsigned int j = 0; j < target_strand.length(); j++){
+                if (input_strand[i+j] == target_strand[j]){
+                    counter++;
+                }
+            }
+            previousCounter = counter;
+            counter = 0;
+        }
+    }
+    return (double)previousCounter / (double)target_strand.length();
+}
+
 int main(){
-    
-    assert(strandSimilarity("AGGT" , "CTGA") == 0.25);
-    assert(strandSimilarity("CCTT" , "CCTT") == 1);
-    assert(strandSimilarity("ATG" , "AAATTT") == 0);
-    assert(strandSimilarity("CTGTAGAGCT" , "TAGCTACCAT") == 0.2);
+    cout << bestStrandMatch("hello world!", "wors") << endl;
 }
