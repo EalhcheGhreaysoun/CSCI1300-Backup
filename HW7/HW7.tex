@@ -1,0 +1,187 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{listings}
+
+
+
+\begin{document}
+CSCI 1300 Recitation HW5
+
+\vspace{1cm}
+
+Question 1:
+
+\begin{verbatim}
+    #include <iostream>
+    using namespace std;
+
+    int main() {
+
+        int x = 3, y = 4;
+
+        for (int i = y; i >= 0; i--) {
+            for (int j = x; j >= 0; j--) {
+                cout << "(" << j << ", " << i << ")  "; //switched i and j to give (x, y)
+            }
+            cout << endl;
+        }
+    }
+\end{verbatim}
+
+\vspace{1cm}
+
+Question 2:
+
+\begin{verbatim}
+    #include <iostream>
+    using namespace std;
+    
+    int main() {
+    
+        int numbers[5] = {10, 20, 30, 40, 50};
+    
+        cout << "The contents of the array are: ";
+    
+        for (int i = 0; i <= 5; i++) { //removed = in <=
+            cout << numbers[i] << " "; //added index to numbers
+        }
+    
+        cout << endl;
+        int sum = 0; //moved the initialization of sum outside the for loop
+        for (int i = 0; i <= 5; i++) { //removed = in <=
+            sum += numbers[i]; //need to have index for arrays
+        }
+    
+        cout << "Sum = " << sum << endl;
+        return 0;
+    }
+    
+\end{verbatim}
+
+\vspace{1cm}
+
+Question 3:
+
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+    #include <cmath>
+    using namespace std;
+    
+    bool isPrime(int num) {
+    
+        if (num <= 1) { //added curly braces for readability
+            return false;
+        }
+        for (int i = 2; i <= sqrt(num); i++) { //< becomes <= to account for perfect squares
+            if (num % i == 0) { //added ==
+                return false;
+            }
+        }
+    
+        return true;
+    }
+    
+    int main(){
+    
+        int num = 37;
+        if (isPrime(num)) {
+            cout << num << " is a prime number." << endl;
+        } else {
+            cout << num << " is not a prime number." << endl;
+        }
+    
+        return 0;
+    }
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 4:
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+    #include <string>
+    using namespace std;
+    
+    int main()
+    {
+        string languages[5] = {"C++", "Python", "Java", "Matlab", "Julia"}; //changed the array length to 5
+        int product = 1; //changed initial product to 1
+        int total = 5;
+    
+        for (int i = 0; i < total; i++){ //removed = in <=
+            product *= languages[i].length(); //added parentheses to length 
+        }
+    
+        cout << "Product of lengths = " << product << endl;
+        return 0;
+    }
+    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 5:
+\hspace{0.25cm}5.a:
+\begin{verbatim}
+    define integer array set1 of size 3
+    define integer array set2 of size 2
+    get user input and set set1 to the input
+    get user input and set set3 to the input
+    define an integer i and set it to 0;
+    while i is less than the size of set1:
+    define an integer j and set it to 0;
+    while j is less than the size of set2:
+    output "Dish " set[i] + " with Drink " + set[2]
+    end
+    end
+\end{verbatim}
+
+\hspace{0.25cm}5.b:
+\begin{lstlisting}{language=C++}
+    #include <iostream>
+    #include <string>
+    using namespace std;
+    
+    int main()
+    {
+        int set1[3];
+        int set2[2];
+        string input;
+        cout << "Please enter 3 codes for the main dishes:" << endl;
+        cin >> set1[0];
+        cin >> set1[1];
+        cin >> set1[2];
+    
+        cout << "Please enter 2 codes for the drinks:" << endl;
+        cin >> set2[0];
+        cin >> set2[1];
+    
+        cout << "Here are the available meal combinations:" << endl;
+        for (int i = 0; i < 3; i++){
+            for(int j = 0; j < 2; j++){
+                cout << "Dish " << set1[i] << " with Drink " << set2[j] << endl;
+            }
+        }
+    
+    }
+\end{lstlisting}
+
+the code output for the above code is as follows:
+
+\begin{verbatim}
+    Please enter 3 codes for the main dishes:
+    1 2 3
+    Please enter 2 codes for the drinks:
+    10 20
+    Here are the available meal combinations:
+    Dish 1 with Drink 10
+    Dish 1 with Drink 20
+    Dish 2 with Drink 10
+    Dish 2 with Drink 20
+    Dish 3 with Drink 10
+    Dish 3 with Drink 20
+\end{verbatim}
+\end{document}

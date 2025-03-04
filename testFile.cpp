@@ -1,49 +1,22 @@
-
 #include <iostream>
+#include <string>
 using namespace std;
 
-int main() {
-    int x=4;
-    int y=1;
-    switch (y)
-    {
-    case 1:
-        switch (x)
-        {
-            case 2:
-                cout << "Yippee ";
-            case 3:
-                cout << "Kai ";
-                break;
-            case 4:
-                cout << "test ";
-            default:
-                cout << "test3 ";
-                break;
+double strandSimilarity(string strand1, string strand2){
+    int count = 0;
+    double compared = 0;
+    if (strand1.length() == strand2.length()){
+        for (unsigned int i = 0; i < strand1.length(); i++){
+            if (strand1[i] == strand2[i]){
+                count++;
+            }
         }
-    case 2:
-        cout << "case 2" << endl;
-        if (0 <= x && x < 2) {
-            cout << "test 2 ";
-        } else if (x < 4) {
-            cout << "Yai ";
-        }
-        if (x < 6) {
-            cout << "test 5 ";
-        }
-        cout << "test 4 ";
-    default:
-        if (0 >= x && x < 3) {
-            cout << "Yai ";
-        } else if (x < 4) {
-            cout << "Yay ";
-        } else if (x < 6) {
-        if (y > 2) {
-            cout << "Yippee ";
-        } else {
-            cout << "Kai ";
-        }
-        }
+        compared = (double)count / (double)strand2.length();
     }
-    return 0;
+    return compared;
+}
+
+int main()
+{
+    cout << strandSimilarity("ASDFG", "ASDFF") << endl;
 }
