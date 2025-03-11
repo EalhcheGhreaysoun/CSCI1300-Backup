@@ -1,0 +1,220 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{listings}
+
+
+\begin{document}
+CSCI 1300 Recitation HW 8
+
+\vspace{1cm}
+
+Question 1:
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+    #include <fstream> //needed to include fstream
+    #include <string>
+    using namespace std;
+
+    int main()
+    {
+        ifstream my_file("Visitor.txt"); 
+        string full_line;
+        string days[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        int vis[5] = {0, 0, 0, 0, 0}; 
+        int i = 0;
+        int traffic = 0;
+        int j = 0;
+        int k = 0; //added counter
+
+        while (getline(my_file, full_line))
+        {
+            for(int i = 0; i < static_cast<int>(full_line.length()); i+=1) 
+            {
+                if(full_line[i] == ' ' && i < static_cast<int>(full_line.length())-1)
+                {
+                    vis[k]++;//array is named vis, changed index to counter k
+                }
+                if(full_line[i] == ',') //use a character for comparison
+                {
+                    vis[k]++; // array is named vis, changed index to counter k
+                }
+            }
+            //flipped comparison
+            if (vis[k] > traffic) //array is named vis, changed index to counter k
+            {
+                traffic = vis[k]; //array is named vis, changed index to counter k
+                j = k; //set j = to k
+            }
+            i++;
+            k++; //incrememt k
+        }
+        cout << days[j] << " is the busiest day of the week at the mueseum." << endl;
+
+        return 0;
+}
+\end{lstlisting}    
+
+\vspace{1cm}
+
+Question 2:
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+    #include <sstream>
+    #include <string>
+    using namespace std;
+
+    bool validateDouble(string input){
+        stringstream numS(input);
+        string line;
+        int beginningIdx = 0;
+        bool aPeriod = false;
+        bool isValidNum = true;
+        while(getline(numS, line)){
+            if(line[0] == '-'){
+                beginningIdx = 1;
+            }
+            for(int i = beginningIdx; i < static_cast<int>(line.length()); i++){
+                if(!aPeriod && line[i] == '.' && i != beginningIdx){
+                    aPeriod = true;
+                }else if(aPeriod && line[i] == '.'){
+                    isValidNum = false;
+                }else if(!isdigit(line[i])){
+                    isValidNum = false;
+                }
+            }
+        }
+        return isValidNum;
+
+    }
+
+    int main(){
+        string doubleIn;
+        cout << "Enter the double:" << endl;
+        cin >> doubleIn;
+
+        if(validateDouble(doubleIn)){
+            cout << "The entered string is a valid double!!" << endl;
+        }
+        else{
+            cout << "The entered string is not a valid double!!" << endl;
+        }
+
+        return 0;
+}
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 3:
+
+\begin{lstlisting}[language=C++]
+    #include <sstream>
+    using namespace std;
+    
+    bool IsValidateDouble(string input){
+        stringstream numS(input);
+        string line;
+        int beginningIdx = 0;
+        bool aPeriod = false;
+        bool isValidNum = true;
+        while(getline(numS, line)){
+            if(line[0] == '-'){
+                beginningIdx = 1;
+            }
+            for(int i = beginningIdx; i < static_cast<int>(line.length()); i++){
+                if(!aPeriod && line[i] == '.' && i != beginningIdx){
+                    aPeriod = true;
+                }else if(aPeriod && line[i] == '.'){
+                    isValidNum = false;
+                }else if(!isdigit(line[i])){
+                    isValidNum = false;
+                }
+            }
+        }
+        return isValidNum;
+    }
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 4:
+
+\begin{lstlisting}{language=C++}
+    #include <iostream>
+    #include <fstream>
+    #include <string>
+    
+    //import previously made functions
+    #include "libs/IsValidDouble.cpp"
+    #include "libs/SplitString.cpp"
+    
+    using namespace std;
+    
+    int main()
+    {
+        double midterm1Sum = 0;
+        double midterm2Sum = 0;
+        double midterm3Sum = 0;
+        int numStudents = 0;
+        int idx = 0;
+        bool invalidString = false;
+        int invalidStudent;
+    
+        double NumsIn[3];
+        string NumsInS[3];
+    
+        ifstream fileIn("midterms.txt");
+        if(fileIn.fail()){
+            cout << "file failed" << endl;
+        }
+        string line;
+        while(getline(fileIn, line)){
+            SplitString(line, ',', NumsInS, 3);
+            if(line != ""){
+                numStudents++;
+                idx = 0;
+                while(idx < 3){
+                    if(IsValidateDouble(NumsInS[idx])){
+                        NumsIn[idx] = stod(NumsInS[idx]);
+                        switch (idx)
+                        {
+                        case 0:
+                            midterm1Sum += NumsIn[idx];
+                            break;
+                        case 1:
+                            midterm2Sum += NumsIn[idx];
+                            break;
+                        case 2:
+                            midterm3Sum += NumsIn[idx];
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    else if(!IsValidateDouble(NumsInS[idx])){
+                        invalidString = true;
+                        invalidStudent = numStudents;
+                    }
+                    idx++;
+                }
+                cout << numStudents;
+            }
+        }
+    
+        if(!invalidString){
+            cout << "The average scores per midterm are: " << endl;
+            cout << "Midterm 1: " << midterm1Sum/(numStudents) << endl;
+            cout << "Midterm 2: " << midterm2Sum/(numStudents) << endl;
+            cout << "Midterm 3: " << midterm3Sum/(numStudents) << endl;
+        }else if(invalidString){
+            //the below two lines is actually one, writen as two to fit on the page
+            cout << "Invalid value detected in Student " 
+                << invalidStudent << "'s score!" << endl;
+        }
+        return 0;
+    }    
+\end{lstlisting}
+\end{document}

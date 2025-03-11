@@ -1,39 +1,59 @@
 #include <iostream>
+#include <fstream>
+#include "libs/SplitString.cpp"
 
 using namespace std;
 
-int minAverg( int scores[][10], const int NUM_STUDENTS, double threshold )
-{
-    double sum = 0;
-    double mean = 0;
-    double worstStudent = 0;
-    bool isNoWorstStudent = true;
+void printHikeStats(string file_name){
+    ifstream hikeData(file_name);
+    if (hikeData.fail()){
+        cout << "Could not open file." << endl;
+    }
+    string tokenY;
+    string tokenX;
+    string name[30];
+    string hikeLengthS[30];
+    int hikeLength[30];
+    string elevationGainS[30];
+    int elevationGain[30];
+    int idx = 0;
+    int idy = 0;
 
-    for(int i = 0; i < NUM_STUDENTS; i++){
-        for (int j = 0; j < 10; j++){
-            sum += scores[i][j];
+    //get data into seperate arrays
+    while(getline(hikeData, tokenY)){
+        if(tokenY != ""){
+            stringstream textX(tokenY);
+            while(getline(textX, tokenX, '|')){
+                if(idx == 0){
+                    name[idy] = tokenX;
+                }else if(idx == 1){
+                    hikeLengthS[idy] = tokenX;
+                }else if(idx == 2){
+                    elevationGainS[idy] = tokenX;
+                }
+                idx++;
+                cout << idy << " " << tokenX << endl;
+            }
         }
-        mean = sum/10;
-        if(mean <= threshold){
-            worstStudent = i;
-            isNoWorstStudent = false;
-            break;
+        idx = 0;
+        idy++;   
+    }
+
+    for(int i = 0; i < 30; i++){
+        if(hikeLengthS[i] != ""){
+            hikeLength[i] = stoi(hikeLengthS[i]);
+            elevationGain[i] = stoi(elevationGainS[i]);
         }
-        sum = 0;
     }
-    if(isNoWorstStudent){
-        return -1;
+
+    for(int i = 0; i < 30; i++){
+        cout << elevationGainS[i] << endl;
+        
     }
-    else{return worstStudent;}
+    hikeData.close();
 }
 
 int main(){
-    int scores[4][10] = {
-        {50, 60, 55, 65, 70, 60, 58, 62, 55, 65}, 
-        {70, 80, 75, 85, 90, 65, 78, 82, 88, 74},
-        {10, 20, 15, 25, 12, 30, 18, 22, 17, 15},  
-        {100, 110, 105, 115, 120, 90, 108, 102, 114, 104},
-    };
-    cout << "returned student index: " <<  minAverg(scores, 5, 40);
+    printHikeStats("testFile.txt");
     return 0;
 }
