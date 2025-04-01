@@ -1,0 +1,164 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{listings}
+
+
+\begin{document}
+CSCI 1300 Recitation HW 10
+
+\vspace{1cm}
+
+Question 1:
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+
+    using namespace std;
+    
+    class Temperature {
+    public:
+        Temperature(double t) { 
+            temp = t; 
+        }
+    
+        double getTemp() { 
+            return temp; 
+        }
+    
+    private:
+        double temp;
+    };
+    
+    int main() {
+        //removed const from object creation
+        Temperature todayTemp(98.6);
+        cout << "Today's temperature is: " << todayTemp.getTemp() << " degrees." << endl;
+        return 0;
+    }    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 2:
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+    using namespace std;
+    
+    class Account {
+    public:
+        Account(double bal) {
+            balance = bal; //changed "amount" to "balence"
+        }
+    
+        double getBalance() const {
+            return balance;
+        }   
+    private:
+        double balance;
+    };
+    
+    int main() {
+        Account myAcc(1000.0);
+        cout << "Current balance: " << myAcc.getBalance() << endl;
+        return 0;
+    }    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 3:
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+    using namespace std;
+    
+    //added private and public keywords
+    class Car {
+    public:
+        void setMiles(int newMiles) {
+            milesDriven = newMiles;
+        }
+    private:
+        int milesDriven;
+    };
+    
+    int main() {
+        Car myCar;
+        myCar.setMiles(100);
+        return 0;
+    }    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 4:
+
+\begin{lstlisting}[language=C++]
+    #include <iostream>
+    using namespace std;
+    
+    struct Pizza
+    {
+        string name;
+        string size;
+        double price;
+    };
+    
+    struct Order
+    {
+        Pizza pizza[10];
+        int numPizzas = 0;
+    };
+    
+    void displayPizza(Pizza pizza){
+        cout << pizza.size << " " << pizza.name << ": $" << to_string(pizza.price) << endl;
+    }
+    
+    void addPizza(Order& order, Pizza pizza){
+        if(order.numPizzas >= 10){
+            cout << "Unable to add pizza as order is full." << endl;
+        }else{
+            order.pizza[order.numPizzas] = pizza;
+            order.numPizzas = order.numPizzas + 1;
+        }
+    }
+    
+    double calculateTotal(Order order){
+        double total = 0;
+        for(int i = 0; i < order.numPizzas; i++){
+            total += order.pizza[i].price;
+        }
+        return total;
+    }
+    
+    void displayOrder(Order order){
+        for(int i = 0; i < order.numPizzas; i++){
+            displayPizza(order.pizza[i]);
+        }
+        cout << "The total for this order is: $" << calculateTotal(order) << endl;
+    }
+    
+    int main(){
+        Pizza pizza1;
+        pizza1.name = "a pizza 1";
+        pizza1.size = "medium";
+        pizza1.price = 14.90;
+        Pizza pizza2;
+        pizza2.name = "a pizza 2";
+        pizza2.size = "large";
+        pizza2.price = 18.90;
+        Pizza pizza3;
+        pizza3.name = "a pizza 3";
+        pizza3.size = "small";
+        pizza3.price = 10.90;
+        Order myOrder;
+        addPizza(myOrder, pizza1);
+        addPizza(myOrder, pizza2);
+        addPizza(myOrder, pizza3);
+        cout << myOrder.numPizzas << endl;;
+        displayOrder(myOrder);
+    }
+\end{lstlisting}
+\end{document}

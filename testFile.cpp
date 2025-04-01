@@ -1,105 +1,64 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <iomanip>
-
 using namespace std;
 
-struct Restaurant
+struct Pizza
 {
     string name;
-    int food_quality;
-    int cleanliness;
-    int wait_time;
-    double overall;
+    string size;
+    double price;
 };
 
-int readRestaurantDetails( string filename, Restaurant restaurant[], const int MAX_RESTAURANTS ){
-    ifstream fileIn(filename);
-    string line;
-    string element;
-    int idx, idy = 0;
-    int numElements = 0;
-
-    if(fileIn.fail()){
-        return -1;
-    }else{
-        while(getline(fileIn, line)){
-            if(line != ""){
-                stringstream lineStream(line);
-                idx = 0;
-                while(getline(lineStream, element, '~')){
-                    numElements++;
-                }
-                element = "";
-                if(numElements == 5){
-                    while(getline(lineStream, element, '~')){
-                        switch (idx)
-                        {
-                            case 0:
-                                restaurant[idy].name = element;
-                                break;
-                            case 1:
-                                restaurant[idy].food_quality = stoi(element);
-                                break;
-                            case 2:
-                                restaurant[idy].cleanliness = stoi(element);
-                                break;
-                            case 3:
-                                restaurant[idy].wait_time = stoi(element);
-                                break;
-                            case 4:
-                                restaurant[idy].overall = stod(element);
-                                break;
-                            default:
-                                break;
-                        }
-                        idx++;
-                    }
-                }
-            }
-            idy++;
-        }
-        return idy;
-    }
-}
-
-int getBest( Restaurant restaurants[], int arr_size, string metric ){
-    int bestRest = 0;
-    for(int i = 0; i < arr_size; i++){
-        if((metric == "Food Quality")){
-            if((restaurants[i].food_quality > restaurants[bestRest].food_quality)){bestRest = i;}
-        }else if(metric == "Cleanliness"){
-            if((restaurants[i].cleanliness > restaurants[bestRest].cleanliness)){bestRest = i;}
-        }else if(metric == "Wait Time"){
-            if(restaurants[i].wait_time > restaurants[bestRest].wait_time){bestRest = i;}
-        }else if(metric == "Overall"){
-            if(restaurants[i].overall > restaurants[bestRest].overall){bestRest = i;}
-        }else{
-            bestRest = -1;
-        }
-    }
-    return bestRest;
-}
-
-double getOverallRating(Restaurant restaurant){
-    if((restaurant.food_quality>=0 && restaurant.food_quality <=10)&&(restaurant.cleanliness>=0 && restaurant.cleanliness <=10)&&(restaurant.wait_time>=0 && restaurant.wait_time <=5)){
-        return (0.5*restaurant.food_quality) + (0.3*restaurant.cleanliness) + (0.2*restaurant.wait_time);
-    }
-    else{
-        return -1;
-    }
-}
-
-int main()
+struct Order
 {
-    // PART A
-    Restaurant restaurants[30];
+    Pizza pizza[10];
+    int numPizzas = 0;
+};
 
-    cout << " ." << readRestaurantDetails("testFile.txt", restaurants, 30) << endl;
-    cout << "." << getBest(restaurants, readRestaurantDetails("testFile.txt", restaurants, 30), "Food Qualxty");
+void displayPizza(Pizza pizza){
+    cout << pizza.size << " " << pizza.name << ": $" << to_string(pizza.price) << endl;
+}
 
-    // Checking if the file was opened correctly
-    
+void addPizza(Order& order, Pizza pizza){
+    if(order.numPizzas >= 10){
+        cout << "Unable to add pizza as order is full." << endl;
+    }else{
+        order.pizza[order.numPizzas] = pizza;
+        order.numPizzas = order.numPizzas + 1;
+    }
+}
+
+double calculateTotal(Order order){
+    double total = 0;
+    for(int i = 0; i < order.numPizzas; i++){
+        total += order.pizza[i].price;
+    }
+    return total;
+}
+
+void displayOrder(Order order){
+    for(int i = 0; i < order.numPizzas; i++){
+        displayPizza(order.pizza[i]);
+    }
+    cout << "The total for this order is: $" << calculateTotal(order) << endl;
+}
+
+int main(){
+    Pizza pizza1;
+    pizza1.name = "a pizza 1";
+    pizza1.size = "medium";
+    pizza1.price = 14.90;
+    Pizza pizza2;
+    pizza2.name = "a pizza 2";
+    pizza2.size = "large";
+    pizza2.price = 18.90;
+    Pizza pizza3;
+    pizza3.name = "a pizza 3";
+    pizza3.size = "small";
+    pizza3.price = 10.90;
+    Order myOrder;
+    addPizza(myOrder, pizza1);
+    addPizza(myOrder, pizza2);
+    addPizza(myOrder, pizza3);
+    cout << myOrder.numPizzas << endl;;
+    displayOrder(myOrder);
 }
