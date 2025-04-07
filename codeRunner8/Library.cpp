@@ -27,7 +27,7 @@ Library::Library(string name, int page_counts[], int arr_size)
         _current_books = _MAX_BOOKS;
     }
     for(int i = 0; i < _current_books; i++){
-        _page_counts[i] = page_counts[i];
+        _page_counts[i-1] = page_counts[i];
     }
 
 }
@@ -49,7 +49,7 @@ void Library::setName(string name)
 
 int Library::getPageCount(int page)
 {
-    if(page-1 < _current_books){
+    if(page < _current_books){
         return _page_counts[page-1];
     }else{
         return -1;
@@ -62,7 +62,7 @@ bool Library::addPageCount(int pages)
         return false;
     }else{
         if(pages > 0){
-            _page_counts[_current_books] = pages;
+            _page_counts[_current_books-1] = pages;
             _current_books+=1;
             return true;
         }else{
@@ -73,5 +73,14 @@ bool Library::addPageCount(int pages)
 
 double Library::getAveragePageCount()
 {
-    return 0.0;
+    double total = 0;
+    if(_current_books == 0){
+        return 0;
+    }
+    else{
+        for (int i = 0; i < _current_books; i++){
+            total += _page_counts[i-1];
+        }
+        return total/(double)_current_books;
+    }
 }
