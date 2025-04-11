@@ -3,24 +3,25 @@
 using namespace std;
 
 class Player{
-
-};
-
-class Character{
-public:
-
 private:
-    string name;
-    int strength;
-    int stamina;
-    int wisdom;
-    int pridePts;
+    int _player_index;
+
+    string _name;
+    int _strength;
+    int _stamina;
+    int _wisdom;
+    int _pridePts;
+public:
+    Player();
+    Player(int index, string name, int strength, int stamina, int wisdom, int pridePts);
+    int getPlayerIndex();
+    string getPlayerName() const;
+    int getPlayerStrength() const;
+    int getPlayerStamina() const;
+    int getPlayerWisdom() const;
+    int getPlayerPridePts() const;
 };
 
-class Path{
-
-};
-
-class Tile{
+class Advisor{
 
 };
