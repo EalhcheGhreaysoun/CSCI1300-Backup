@@ -1,0 +1,148 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{listings}
+
+
+\begin{document}
+CSCI 1300 Recitation HW 15
+
+\vspace{1cm}
+
+Question 1:
+
+\begin{lstlisting}[language=C++]
+    #include <vector>
+    #include <iostream>
+    using namespace std;
+    
+    int main() {
+        vector<int> v = {5, 6, 7, 8, 9};
+        //added find and v.at to iterate to the correct element
+        v.erase(find(v.begin(), v.end(), v.at(0)));
+        
+        cout << v[0] << endl;
+        return 0;
+    }
+    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 2:
+
+\begin{lstlisting}[language=C++]
+    #include <vector>
+    #include <iostream>
+    using namespace std;
+    
+    int main() {
+        vector<int> v;
+        //used vector push_back instead of vector at
+        v.push_back(42);
+        cout << v.at(0) << endl;
+        return 0;
+    }
+    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 3:
+
+\begin{lstlisting}[language=C++]
+    #include <vector>
+    #include <iostream>
+    using namespace std;
+    
+    int main() {
+        vector<int> v = {2, 4, 6, 8, 9};
+    
+        for (int i = 0; i < v.size(); i++) {
+            if ((v.at(i) % 2) == 0) {
+                v.erase(v.begin() + i);
+                i--; //decrement to deal with decreasing size of v
+            }
+        }
+    
+        // Print remaining elements
+        for (int i = 0; i < v.size(); i++) {
+            cout<< v.at(i) <<" ";
+        }
+        cout << endl;
+        return 0;
+    }    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 4:
+
+\begin{lstlisting}[language=C++]
+    #include <vector>
+    #include <iostream>
+    using namespace std;
+    
+    int main() {
+        vector<int> v = {5, 6, 7, 8, 9};
+        
+        int length = v.size(); //static length variable
+    
+        for(int i = 0; i < length; i++){
+            v.push_back(v[i] * 2);
+        }
+        
+        for(int i=0; i<v.size(); i++){
+            cout<< v[i]<< endl;
+        }
+    }
+    
+\end{lstlisting}
+
+\vspace{1cm}
+
+Question 5:
+
+\begin{lstlisting}[language=C++]
+    /*
+    Psudocode:
+    define function Fibonacci
+    take input n
+    variable total = 1
+    variable prev_total = 0
+    for and integer i = 0 less than n:
+    x = total;
+    total = prev_total+x;
+    prev_total = x;
+    increment i
+    end
+    end
+    
+    inputs:
+    n=3, total = 2
+    n=5, total = 5
+    n=8, total = 21
+    */
+    #include <iostream>
+    
+    using namespace std;
+    
+    int Fibonacci(int n){
+        int total = 1;
+        int prev_total = 0;
+        int x = 0;
+    
+        for (int i = 0; i < n-1; i++){
+            x = total;
+            total = prev_total+x;
+            prev_total = x;
+        }
+        return total;
+    }
+    int main(){
+        cout << Fibonacci(8) << endl;
+        return 0;
+    }
+\end{lstlisting}
+
+\end{document}
