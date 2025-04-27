@@ -6,23 +6,23 @@ class Board
 {
 private:
     static const int _BOARD_SIZE = 52;
-    Tile _tiles[2][_BOARD_SIZE];
-    static const int _MAX_PLAYERS = 2;
-    int _player_count;
-    int _player_position[_MAX_PLAYERS];
-    void displayTile(int player_index, int pos);
-    void initializeTiles(int player_index);
-    bool isPlayerOnTile(int player_index, int pos);
+    Tile _tiles[_BOARD_SIZE];
+    int _player_position;
+    int _player_index;
+    void displayTile(int pos);
+    void initializeTiles(int path);
+    bool isPlayerOnTile(int pos);
 
 public:
     Board();
-    Board(int player_count);
-    void displayTrack(int player_index);
-    void initializeBoard();
-    void displayBoard();
-    bool movePlayer(int player_index);
-    int getPlayerPosition(int player_index) const;
-    char getTile(int player_index, int pos) const;
+    Board(int path, int player_index);
+    void displayTrack();
+    void initializeBoard(int path);
+    void displayBoard(int player_index);
+    void setPlayerIndex(int index);
+    bool movePlayer(int n);
+    int getPlayerPosition() const;
+    char getTile(int pos) const;
 };
 
 #endif
