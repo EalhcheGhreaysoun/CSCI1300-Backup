@@ -63,6 +63,7 @@ int main(){
     int n;
 
     stringstream s;
+    stringstream a;
 
     //character list output
     while(flag){
@@ -111,11 +112,10 @@ int main(){
         row = 0;
         if (n < 1 || n > 5){
             cout << "Not an option." << endl;
-            fileIn.close();
         }else{
             flag = false;
-            fileIn.close();
         }
+        fileIn.close();
     }
     flag = true;
     //end character list output
@@ -123,38 +123,38 @@ int main(){
     //player 1 setting
     fileIn.open("characters.txt");
     //set player 1 to chosen character
-    while(getline(fileIn, line)){
-        if(row == (n)){
-            stringstream a(line);
-            elem = 0;
-            while(getline(a, element, '|')){
-                switch (elem)
-                {
-                    case 0:
-                        temp_name = element;
-                        break;
-                    case 1:
-                        temp_age = stoi(element);
-                        break;
-                    case 2:
-                        temp_strength = stoi(element);
-                        break;
-                    case 3:
-                        temp_stamina = stoi(element);
-                        break;
-                    case 4:
-                        temp_wisdom = stoi(element);
-                        break;
-                    case 5:
-                        temp_pridePts = stoi(element);
-                        break;
-                    default:
-                        break;
-                }
-                elem++;
-            }
+    for(int i = 0; i < n; i++){
+        getline(fileIn, line);
+    }
+    getline(fileIn, line);
+    a.str("");
+    a.str(line);
+    elem = 0;
+    while(getline(a, element, '|')){
+        switch (elem)
+        {
+            case 0:
+                temp_name = element;
+                break;
+            case 1:
+                temp_age = stoi(element);
+                break;
+            case 2:
+                temp_strength = stoi(element);
+                break;
+            case 3:
+                temp_stamina = stoi(element);
+                break;
+            case 4:
+                temp_wisdom = stoi(element);
+                break;
+            case 5:
+                temp_pridePts = stoi(element);
+                break;
+            default:
+                break;
         }
-        row++;
+        elem++;
     }
     fileIn.close();
     Player player1(temp_name, temp_age, temp_strength, temp_stamina, temp_wisdom, temp_pridePts);
@@ -176,11 +176,10 @@ int main(){
         n = input - '0';
         if(n == 1 || n == 2){
             flag = false;
-            fileIn.close();
         }else{
             cout << "Not a choice" << endl;
-            fileIn.close();
         }
+        fileIn.close();
     }
     flag = true;
     if(n == 1){
@@ -201,10 +200,8 @@ int main(){
             row = 0;
             if (n < 1 || n > 5){
                 cout << "Not an option." << endl;
-                fileIn.close();
             }else{
                 flag = false;
-                fileIn.close();
             }
             fileIn.close();
         }
@@ -276,39 +273,40 @@ int main(){
     //player 2 setting
     fileIn.open("characters.txt");
     //set player 2 to chosen character
-    while(getline(fileIn, line)){
-        if(row == (n)){
-            stringstream a(line);
-            elem = 0;
-            while(getline(a, element, '|')){
-                switch (elem)
-                {
-                    case 0:
-                        temp_name = element;
-                        break;
-                    case 1:
-                        temp_age = stoi(element);
-                        break;
-                    case 2:
-                        temp_strength = stoi(element);
-                        break;
-                    case 3:
-                        temp_stamina = stoi(element);
-                        break;
-                    case 4:
-                        temp_wisdom = stoi(element);
-                        break;
-                    case 5:
-                        temp_pridePts = stoi(element);
-                        break;
-                    default:
-                        break;
-                }
-                elem++;
-            }
-        }
-        row++;
+    for(int i = 0; i < n; i++){
+        getline(fileIn, line);
     }
+    getline(fileIn, line);
+    a.str("");
+    a.str(line);
+    elem = 0;
+    while(getline(a, element, '|')){
+        switch (elem)
+        {
+            case 0:
+                temp_name = element;
+                break;
+            case 1:
+                temp_age = stoi(element);
+                break;
+            case 2:
+                temp_strength = stoi(element);
+                break;
+            case 3:
+                temp_stamina = stoi(element);
+                break;
+            case 4:
+                temp_wisdom = stoi(element);
+                break;
+            case 5:
+                temp_pridePts = stoi(element);
+                break;
+            default:
+                break;
+        }
+        elem++;
+    }
+    fileIn.close();
     Player player2(temp_name, temp_age, temp_strength, temp_stamina, temp_wisdom, temp_pridePts);
     //end player 2 setting
 
@@ -583,17 +581,17 @@ int main(){
                         }else if((rand() % 2) == 1){
                             fileIn.open("random_events.txt");
                             cout << "You landed on a savana tile. ";
-                            randomLine = (rand()%51);
+                            randomLine = rand()%51;
                             for (int i = 0; i < randomLine; i++)
                             {
                                 getline(fileIn, line);
                             }
                             getline(fileIn, line);
                             s.str("");
-                            s << line;
+                            s.str(line);
                             //description
                             getline(s, elementOut, '|');
-                            cout << element << endl;
+                            cout << elementOut << endl;
                             //path type
                             getline(s, element, '|');
                             if(i == 0){//player 1
@@ -665,6 +663,7 @@ int main(){
                                     }
                                 }
                             }
+                            fileIn.close();
                         }
                         isTurn = false;
                         break;
