@@ -291,7 +291,7 @@ void Board::setPlayerIndex(int index)
 bool Board::movePlayer(int n)
 {   
     if(n < 0){
-        if((_player_position - n) > 0){
+        if((_player_position + n) > 0){
             _player_position += n;
         }else{
             _player_position = 0;

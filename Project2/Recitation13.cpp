@@ -339,6 +339,7 @@ int main(){
         player2.setBoard(board2);
         player2.setPridePts(5000);
         while(flag){
+            fileIn.open("Advisor.txt");
             row = 0;
             cout << "Choose an advisor out of the following list." << endl;
             elem = 0;
@@ -354,6 +355,7 @@ int main(){
             }else{
                 flag = false;
             }
+            fileIn.close();
         }
         player2.setAdvisor(n);
         flag = true;
@@ -369,14 +371,25 @@ int main(){
         for(int i = 0; i < 2; i++){
             isTurn = true;
             move_distance = 0;
-            while(isTurn){
-                //a player is at the end, skip turn
-                if(i == 0 && player1.playerGetPlayerPos() >= 52){
-                    isTurn = false;
-                }else if(i == 1 && player2.playerGetPlayerPos() >= 52){
+            if((player1.playerGetPlayerPos() >= 52)){
+                if(i == 0){
                     isTurn = false;
                 }
-
+                player1.playerMovePlayer(52 - player1.playerGetPlayerPos());
+            }else if((player2.playerGetPlayerPos() >= 52)){
+                if(i == 1){
+                    isTurn = false;
+                }
+                player2.playerMovePlayer(52 - player2.playerGetPlayerPos());
+            }
+            if(player2.playerGetPlayerPos() >= 51 && player1.playerGetPlayerPos() >= 51){
+                playing = false;
+            }
+            
+            if(isTurn == true)
+            {
+                while(isTurn == true){
+                //a player is at the end, skip turn
                 cout << "player " << i+1 << " s turn" << endl;
                 if(i == 0){
                     player1.playerDisplayBoard();
@@ -424,21 +437,23 @@ int main(){
                         srand(time(0));
                         move_distance = rand()%5+1;
                         //if both players are at the end, end game
-                        if(player1.playerMovePlayer(move_distance) == true && player2.playerMovePlayer(move_distance) == true){
+                        if((player1.playerGetPlayerPos() + move_distance >= 52) && player2.playerGetPlayerPos() + move_distance >= 52){
                             playing = false;
                         }
-                        if(i == 0){
+                        if(i == 0 && player1.playerGetPlayerPos() < 52){
                             player1.playerMovePlayer(move_distance);
                             cout << "Moving " << move_distance << " tiles." << endl;
                             player1.playerDisplayBoard();
                             break;
-                        }else if(i == 1){
+                        }else if(i == 1 && player2.playerGetPlayerPos() < 52){
                             player2.playerMovePlayer(move_distance);
                             cout << "Moving " << move_distance << " tiles." << endl;
                             player2.playerDisplayBoard();
                             break;
-
+                        }else{
+                            isTurn = false;
                         }
+                        isTurn = false;
                         break;
                     
                     default://exit mode for testing
@@ -446,7 +461,7 @@ int main(){
                         isTurn = false;
                         break;
                 }
-
+                //get tile color
                 if(i == 0){
                     currentTileColor = player1.playerGetTile(player1.playerGetPlayerPos());
                 }else if(i == 1){
@@ -466,10 +481,12 @@ int main(){
                             player2.setPlayerStamina(200);
                             player2.setPlayerWisdom(200);
                         }
+                        isTurn = true;
                         break;
                     case 'P':
                         cout << "Welcome to the land of enrichment, your Stamina, Strength, and Wisdom Points are increased by 300, and you get to choose an advisor from the available list of advisors. If you already have an advisor, you can switch your advisor out for a different one from the list or keep your original advisor. Don't forget - an advisor can protect you from random events that negatively impact your Pride Points." << endl;
                         //set advisor
+                        flag = true;
                         while(flag){
                             fileIn.open("Advisor.txt");
                             row = 0;
@@ -484,11 +501,10 @@ int main(){
                             row = 0;
                             if (n < 1 || n > 5){
                                 cout << "Not an option." << endl;
-                                fileIn.close();
                             }else{
                                 flag = false;
-                                fileIn.close();
                             }
+                            fileIn.close();
                         }
                         if(i == 0){
                             player1.setAdvisor(n);
@@ -538,12 +554,16 @@ int main(){
                     case 'U':
                         cout << "Time for a test of wits! Answer the following riddle, Answer correctly, and you'll earn a boost of 500 Points to your Wisdom Trait — your cleverness pays off!" << endl;
                         randomLine = rand()%28;
-                        s << readNthLine("riddles.txt", randomLine);
-                        getline(s, line, '|');
-                        cout << line;
-                        cin >> element;
+                        fileIn.open("riddles.txt");
+                        for (int i = 0; i < randomLine; i++){
+                            getline(fileIn, line);
+                        }
+                        s.str("");
+                        s << line;
                         getline(s, line, '|');
                         cout << line << endl;
+                        cin >> element;
+                        getline(s, line, '|');
                         if(element == line){
                             cout << "You got it correct and earned 500 wisdom points!" << endl;
                             if(i == 0){
@@ -554,14 +574,23 @@ int main(){
                         }else{
                             cout << "That is incorrect, sorry!" << endl;
                         }
+                        fileIn.close();
                         isTurn = false;
                         break;
                     case 'G':
                         if ((rand() % 2) == 0){
                             cout << "You landed on a Savana tile. Nothing happens." << endl;
                         }else if((rand() % 2) == 1){
+                            fileIn.open("random_events.txt");
                             cout << "You landed on a savana tile. ";
-                            s << readNthLine("random_events.txt", (rand() % 50)+1);
+                            randomLine = (rand()%51);
+                            for (int i = 0; i < randomLine; i++)
+                            {
+                                getline(fileIn, line);
+                            }
+                            getline(fileIn, line);
+                            s.str("");
+                            s << line;
                             //description
                             getline(s, elementOut, '|');
                             cout << element << endl;
@@ -577,7 +606,7 @@ int main(){
                                         cout << elementOut;
                                         //pride points
                                         getline(s, element, '|');
-                                        cout << ". You lost " << stoi(element) * -1 << "Pride Points" << endl; 
+                                        cout << ". You lost " << stoi(element) * -1 << " Pride Points" << endl; 
                                         player1.setPridePts(stoi(element));
                                     }else if(stoi(element) == 0){
                                         cout << elementOut;
@@ -591,7 +620,7 @@ int main(){
                                         cout << elementOut;
                                         //pride points
                                         getline(s, element, '|');
-                                        cout << ". You lost " << stoi(element) * -1 << "Pride Points" << endl; 
+                                        cout << ". You lost " << stoi(element) * -1 << " Pride Points" << endl; 
                                         player1.setPridePts(stoi(element));
                                     }else if(stoi(element) == 0){
                                         cout << elementOut;
@@ -637,7 +666,6 @@ int main(){
                                 }
                             }
                         }
-
                         isTurn = false;
                         break;
 
@@ -646,6 +674,23 @@ int main(){
                 }
                 cout << endl;
 
+                }
+            }
+            if((player1.playerGetPlayerPos() >= 52)){
+                if(i == 0){
+                    isTurn = false;
+                }
+                player1.playerMovePlayer(52 - player1.playerGetPlayerPos());
+                cout << "player 1 ended" << endl;
+            }else if((player2.playerGetPlayerPos() >= 52)){
+                if(i == 1){
+                    isTurn = false;
+                }
+                player2.playerMovePlayer(52 - player2.playerGetPlayerPos());
+                cout << "player 2 ended" << endl;
+            }
+            if(player2.playerGetPlayerPos() >= 51 && player1.playerGetPlayerPos() >= 51){
+                playing = false;
             }
         }
     }
@@ -658,10 +703,10 @@ int main(){
     ofstream gameStats;
     gameStats.open("gameStats.txt");
     gameStats << "Player 1 stats: \n";
-    gameStats << "    Stamina: " << player1.getPlayerStamina() << "\n    Strength: " << player1.getPlayerStrength() << "\n    Wisdom: " << player1.getPlayerWisdom() << "\n final pride points: " << player1.getPlayerPridePts();
+    gameStats << "    Stamina: " << player1.getPlayerStamina() << "\n    Strength: " << player1.getPlayerStrength() << "\n    Wisdom: " << player1.getPlayerWisdom() << "\n    final pride points: " << player1.getPlayerPridePts() << endl;;
 
     gameStats << "Player 2 stats: \n";
-    gameStats << "    Stamina: " << player2.getPlayerStamina() << "\n    Strength: " << player2.getPlayerStrength() << "\n    Wisdom: " << player2.getPlayerWisdom() << "\n final pride points: " << player2.getPlayerPridePts();
+    gameStats << "    Stamina: " << player2.getPlayerStamina() << "\n    Strength: " << player2.getPlayerStrength() << "\n    Wisdom: " << player2.getPlayerWisdom() << "\n    final pride points: " << player2.getPlayerPridePts() << endl;
 
     if(player1.getPlayerPridePts() > player2.getPlayerPridePts()){
         cout << "Player 1, " << player1.getPlayerName() << ", won with " << player1.getPlayerPridePts() << " pride points." << endl;
@@ -683,5 +728,5 @@ int main(){
     cout << endl;
     cout << "all data writen to file: gameStats.txt" << endl;
 
-    
+    return 0;
 }

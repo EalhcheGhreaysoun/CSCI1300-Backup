@@ -1,9 +1,9 @@
 Player 1 stats: 
-    Stamina: 0
-    Strength: 900
-    Wisdom: 600
- final pride points: 30000Player 2 stats: 
-    Stamina: 900
+    Stamina: 100
     Strength: 1200
-    Wisdom: 900
- final pride points: 45000Player 2 won.
+    Wisdom: 800
+ final pride points: 36500Player 2 stats: 
+    Stamina: 600
+    Strength: 1800
+    Wisdom: 1500
+ final pride points: 54000Player 2 won.
