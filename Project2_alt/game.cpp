@@ -49,8 +49,10 @@ int main(){
     //strings and streams
     ifstream Characters;
     ifstream Advisors;
+    stringstream s;
     string line;
     string element;
+    string input;
 
     int moveDistance;
     char currentColor = ' ';
@@ -59,6 +61,8 @@ int main(){
     bool playing = true;
     bool isTurn = true;
     bool flag = true;
+    bool player1Done = false;
+    bool player2Done = false;
         
     //input
     char in;
@@ -239,8 +243,31 @@ int main(){
     // core game loop
     while(playing){
         for(int i = 0; i < 2; i++){
-            isTurn = true;
+            if(player1Done && player2Done){
+                playing = false;
+                cout << "all done" << endl;
+                break;
+            }
+            else if(i == 0 && player1Done){
+                isTurn = false;
+            }else if(i == 1 && player2Done){
+                isTurn = false;
+            }else{
+                isTurn = true;
+            }
+
             while(isTurn){
+
+                if(board.player[i].stamina < 100){
+                    board.player[i].stamina = 100;
+                }
+                if(board.player[i].strength < 100){
+                    board.player[i].strength = 100;
+                }
+                if(board.player[i].wisdom < 100){
+                    board.player[i].wisdom = 100;
+                }
+
                 board.displayBoard();
                 cout << "Player " << i + 1 << "'s turn." << endl;
                 switch (printMenu())
@@ -282,8 +309,7 @@ int main(){
                 }
             }
 
-            // currentColor = board.getTile(board.getPlayerPath(i), board.getPlayerPosition(i));
-            currentColor = 'P';
+            currentColor = board.getTile(board.getPlayerPath(i), board.getPlayerPosition(i));
 
             switch (currentColor)
             {
@@ -292,14 +318,44 @@ int main(){
                 if(board.getPlayerPosition(i) - 10 < 0){
                     board.movePlayer(i, -board.getPlayerPosition(i));
                 }else{
-                    board.movePlayer(i, -(board.getPlayerPosition(i)-10));
+                    board.movePlayer(i, -10);
                 }
                 board.player[i].stamina -= 100;
                 board.player[i].strength -= 100;
                 board.player[i].wisdom -= 100;
                 break;
             case 'G': // green
-                /* code */
+                srand(time(0));
+                a = rand()%2;
+                if(a == 0){
+                    cout << "You landed on a Savana tile. Nothing happens." << endl;
+                }else if(a == 1){
+                    Advisors.open("files/random_events.txt");
+                    n = rand()%50;
+                    for(int i = 0; i < n; i++){
+                        getline(Advisors, line);
+                    }
+                    s.str(line);
+                    getline(s, element, '|');
+                    cout << element << endl;
+                    getline(s, element, '|');
+                    if(stoi(element) == board.getPlayerPath(i)){
+                        getline(s, element, '|');
+                        if(stoi(element)+1 == board.getPlayerAdvisor(i)){
+                            cout << "You have been protected by your advisor." << endl;
+                        }else{
+                            getline(s, element, '|');
+                            if(stoi(element) < 0){
+                                cout << "You lost " << -stoi(element) << " pride points." << endl;
+                                board.player[i].pridePts += stoi(element);
+                            }else{
+                                cout << "You gained " << element << " pride points." << endl;
+                                board.player[i].pridePts += stoi(element);
+                            }
+                        }
+                    }
+                    Advisors.close();
+                }
                 break;
             case 'B': // blue
                 cout << "You've found a peaceful oasis! You are granted an extra turn to keep moving forward and gain 200 Stamina, Strength, and Wisdom Points." << endl;
@@ -309,7 +365,26 @@ int main(){
                 board.player[i].wisdom += 200;
                 break;
             case 'U': // purple
-                /* code */
+                srand(time(0));
+                a = (rand()%26);
+                Advisors.open("files/riddles.txt");
+                for(int i = 0; i < a; i++){
+                    getline(Advisors, line);
+                }
+                getline(Advisors, line);
+                s.str("");
+                s.str(line);
+                getline(s, element, '|');
+                cout << element << endl;
+                getline(s, element, '|');
+                cin >> input;
+                if(input == element){
+                    cout << "You got it correct! You get 500 wisdom points." << endl;
+                    board.player[i].wisdom += 500;
+                }else{
+                    cout << "Sorry! You got it wrong." << endl;
+                }
+                Advisors.close();
                 break;
             case 'N': // brown
                 cout << "The Hyenas are on the prowl! They drag you back to where you were last, and the journey comes at a cost. In addition, your Stamina Points decrease by 300 Points." << endl;
@@ -341,10 +416,35 @@ int main(){
                 }
                 Advisors.close();
                 break;
-            
+            case 'O':
+                if(i == 0){
+                    player1Done = true;
+                    cout << "Congrats! Player 1 has finished the game." << endl;
+                }else if(i == 1){
+                    player2Done = true;
+                    cout << "Congrats! Player 2 has finished the game." << endl;
+                }
             default:
                 break;
             }
         }
     }
+
+
+    board.player[0].pridePts += 10*(board.player[0].stamina+board.player[0].strength+board.player[0].wisdom);
+    board.player[1].pridePts += 10*(board.player[1].stamina+board.player[1].strength+board.player[1].wisdom);
+
+    if(board.player[0].pridePts < board.player[1].pridePts){
+        cout << "Player 1, named " << board.player[0].name << " won with " << board.player[1].pridePts << " pride points, " << board.player[0].strength << " strength, " << board.player[0].stamina << " stamina, " << board.player[0].wisdom << " wisdom." << endl;
+    }else if(board.player[0].pridePts > board.player[1].pridePts){
+        cout << "Player 2, named " << board.player[1].name << " won with " << board.player[1].pridePts << " pride points, " << board.player[1].strength << " strength, " << board.player[1].stamina << " stamina, " << board.player[1].wisdom << " wisdom." << endl;
+    }else {
+        cout << "The game ended in a tie. " << "Player 1, named " << board.player[0].name << " had " << board.player[1].pridePts << " pride points, " << board.player[0].strength << " strength, " << board.player[0].stamina << " stamina, " << board.player[0].wisdom << " wisdom." << endl;
+        cout << "Player 2, named " << board.player[1].name << " had " << board.player[1].pridePts << " pride points, " << board.player[1].strength << " strength, " << board.player[1].stamina << " stamina, " << board.player[1].wisdom << " wisdom." << endl;
+    }
+
+    ofstream outFile("gameStats.txt");
+    outFile << "Player 1, named " << board.player[0].name << " had " << board.player[1].pridePts << " pride points, " << board.player[0].strength << " strength, " << board.player[0].stamina << " stamina, " << board.player[0].wisdom << " wisdom." << endl;
+    outFile << "Player 2, named " << board.player[1].name << " had " << board.player[1].pridePts << " pride points, " << board.player[1].strength << " strength, " << board.player[1].stamina << " stamina, " << board.player[1].wisdom << " wisdom." << endl;
+    outFile.close();
 }

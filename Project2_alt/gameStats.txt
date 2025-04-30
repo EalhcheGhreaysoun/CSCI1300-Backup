@@ -1,0 +1,2 @@
+Player 1, named Apollo had 52700 pride points, 300 strength, 100 stamina, 1300 wisdom.
+Player 2, named Apollo had 52700 pride points, 1000 strength, 700 stamina, 2000 wisdom.
